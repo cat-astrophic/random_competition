@@ -142,9 +142,8 @@ plt.title('Probabilities at which the competition graph\n of a random network be
 plt.xlabel('n')
 plt.ylabel('$ε$')
 ax.set_zlabel('p')
-#fig.colorbar(surf, shrink = 0.4, aspect = 10)
-ax.view_init(30, 30)
-plt.margins(.0666,.0666)
+fig.colorbar(surf, shrink = 0.4, aspect = 10)
+ax.view_init(40, 60)
 plt.savefig(direc + 'figures/estiamted_probabilities.png', dpi = 1000, bbox_inches = 'tight')
 plt.savefig(direc + 'figures/estiamted_probabilities.eps', dpi = 1000, bbox_inches = 'tight')
 plt.show()
@@ -156,52 +155,53 @@ n_axis = []
 
 for n in domain:
     
-    n_axis = n_axis + [n*20]*100
+    n_axis = n_axis + [n]*100
 
-pred_axis = [pred_data[i] / (n_axis[i]-1) for i in range(len(pred_data))]
+pred_axis = [(pred_data[i] * n) / (n_axis[i] * (n_axis[i]-1)) for i in range(len(pred_data))]
 fig, ax = plt.subplots(subplot_kw = {'projection': '3d'})
 surf = ax.plot_trisurf(p_axis, n_axis, pred_axis, cmap = cm.coolwarm, linewidth = 0, antialiased = False)
 plt.title('Predicted mean vertex degrees in the\n competition network of G(n,p) over n and p', fontsize = 12, fontweight = 40, color = 'black')
 plt.xlabel('p')
 plt.ylabel('n')
-ax.set_zlabel('Predicted Values')
-#fig.colorbar(surf, shrink = 0.4, aspect = 10)
-ax.view_init(20, 60)
-plt.margins(.0666,.0666)
-plt.savefig(direc + 'figures/predictions_mean_degree_surf.png', dpi = 1000, bbox_inches = 'tight')
-plt.savefig(direc + 'figures/predictions_mean_degree_surf.eps', dpi = 1000, bbox_inches = 'tight')
+ax.set_zlabel('Predicted Density')
+fig.colorbar(surf, shrink = 0.4, aspect = 10)
+ax.view_init(40, 60)
+plt.savefig(direc + 'figures/predictions_density_surf.png', dpi = 1000, bbox_inches = 'tight')
+plt.savefig(direc + 'figures/predictions_density_surf.eps', dpi = 1000, bbox_inches = 'tight')
 plt.show()
 
 # Create some cool network and competition graph figures using networkx
 
 n = [10]*4 + [20]*4
-p = [.05*i for i in range(2,6)]*2
+p = [0.1, 0.15, 0.2, 0.25]*2
 
-for i in range(8):
+for i in range(len(n)):
     
     M = random_digraph(n[i], p[i])
     A = cg.competition_graph(M)
     
-    N = nx.digraph(M)
-    C = nx.graph(A)
+    N = nx.DiGraph(M)
+    C = nx.Graph(A)
     
     pos = nx.circular_layout(N)
 
     plt.figure()
     nodes_ec = nx.draw_networkx_nodes(N, pos, alpha = 0.5)
-    edges = nx.draw_networkx_edges(N, pos, edge_color = 'lightgray', arrows = False, width = 0.05)
-    plt.title('An example of the random network G('+ str(n) + ',' + str(p) + ')', fontsize = 12)
+    edges = nx.draw_networkx_edges(N, pos, edge_color = 'black', arrows = True, width = 0.25)
+    plt.title('An example of the random network G('+ str(n[i]) + ',' + str(p[i]) + ')', fontsize = 12)
     plt.margins(.0666,.0666)
     plt.axis('off')
-    plt.savefig(direc + 'figures/random_network_g_' + str(n[i]) + '_' + str(int(p*100)) + '.png', dpi = 1000, bbox_inches = 'tight')
-    plt.savefig(direc + 'figures/random_network_g_' + str(n[i]) + '_' + str(int(p*100)) + '.eps', dpi = 1000, bbox_inches = 'tight')
+    plt.show()
+    plt.savefig(direc + 'figures/random_network_g_' + str(n[i]) + '_' + str(int(p[i]*100)) + '.png', dpi = 1000, bbox_inches = 'tight')
+    plt.savefig(direc + 'figures/random_network_g_' + str(n[i]) + '_' + str(int(p[i]*100)) + '.eps', dpi = 1000, bbox_inches = 'tight')
     
     plt.figure()
     nodes_ec = nx.draw_networkx_nodes(C, pos, alpha = 0.5)
-    edges = nx.draw_networkx_edges(C, pos, edge_color = 'lightgray', arrows = False, width = 0.05)
-    plt.title('The corresponding competition graph for G('+ str(n) + ',' + str(p) + ')', fontsize = 12)
+    edges = nx.draw_networkx_edges(C, pos, edge_color = 'black', arrows = False, width = 0.25)
+    plt.title('The corresponding competition graph for G('+ str(n[i]) + ',' + str(p[i]) + ')', fontsize = 12)
     plt.margins(.0666,.0666)
     plt.axis('off')
-    plt.savefig(direc + 'figures/random_comp_graph_g_' + str(n[i]) + '_' + str(int(p*100)) + '.png', dpi = 1000, bbox_inches = 'tight')
-    plt.savefig(direc + 'figures/random_comp_graph_g_' + str(n[i]) + '_' + str(int(p*100)) + '.eps', dpi = 1000, bbox_inches = 'tight')
+    plt.show()
+    plt.savefig(direc + 'figures/random_comp_graph_g_' + str(n[i]) + '_' + str(int(p[i]*100)) + '.png', dpi = 1000, bbox_inches = 'tight')
+    plt.savefig(direc + 'figures/random_comp_graph_g_' + str(n[i]) + '_' + str(int(p[i]*100)) + '.eps', dpi = 1000, bbox_inches = 'tight')
 
